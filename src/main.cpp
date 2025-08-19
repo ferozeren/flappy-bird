@@ -1,13 +1,14 @@
+// raylib lib
 #include "../include/resource_dir.h" // header for SearchAndSetResourceDir
 #include "raylib.h"
 #include <cstdio>
-
-constexpr int OBSTACLE_PIPE = 10;
 
 const unsigned int windowWidth = 1340;
 const unsigned int windowHeight = 900;
 
 constexpr int fps = 60;
+
+Color defaultColor = WHITE;
 
 static unsigned int counter = 0;
 const unsigned int counterLimit = 24;
@@ -34,8 +35,6 @@ int positionDefaultThreeXPos = 1360;
 int positionDefaultFourXPos = 1700;
 
 unsigned short int defaultFontSize = 34;
-
-Color defaultColor = WHITE;
 
 class MainWindow {
 
@@ -724,6 +723,7 @@ int main() {
     mainWindow.endDrawing();
   }
 
+  // Unload Artificats
   backgroundImage.UnLoadBackground();
   bird.UnLoadBird();
   bird.UnLoadBird2();
