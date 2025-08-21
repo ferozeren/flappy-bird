@@ -6,6 +6,7 @@
 const unsigned int windowWidth = 1340;
 const unsigned int windowHeight = 900;
 
+const int narrowPassage = 300;
 constexpr int fps = 60;
 
 Color defaultColor = WHITE;
@@ -26,13 +27,6 @@ bool resetValues = false;
 bool inMotion = false;
 bool isGameOver = false;
 bool isPaintObstacle = false;
-
-int positionCount = 5;
-int positionDefaultZeroXPos = 340;
-int positionDefaultOneXPos = 680;
-int positionDefaultTwoXPos = 1020;
-int positionDefaultThreeXPos = 1360;
-int positionDefaultFourXPos = 1700;
 
 unsigned short int defaultFontSize = 34;
 
@@ -148,7 +142,185 @@ public:
   }
 };
 
-class Bird {
+class FrameTime : public MainWindow {
+private:
+public:
+  void ResetFrameTime() {
+
+    if (isStartMenu || resetValues) {
+      currentFrame = 0;
+      frameSeconds = 0;
+      frameMinutes = 0;
+      return;
+    }
+    if (currentFrame >= fps) {
+      frameSeconds += 1;
+      currentFrame = 0;
+
+      if (frameSeconds >= fps) {
+        frameMinutes += 1;
+        frameSeconds = 0;
+      }
+
+    } else {
+      currentFrame += 1;
+    }
+  }
+};
+
+class Obstacle {
+private:
+public:
+  int minimumHeight = 400;
+  int maximumHeight = 200;
+
+  char shortBuildingName[20] = "short-building.png";
+  int shortBuildingHeight = 0;
+  int shortBuildingWidth = 466;
+  int shortBuildingXPos = 100;
+  int shortBuildingYPos = windowHeight - shortBuildingWidth;
+  Texture shortBuildingTexture;
+
+  char longBuildingName[20] = "long-building.png";
+  int longBuildingHeight = 643;
+  int longBuildingWidth = 300;
+  int longBuildingXPos = 0;
+  int longBuildingYPos = windowHeight - longBuildingHeight;
+  Texture longBuildingTexture;
+
+  char groundTowerName[20] = "ground-tower.png";
+  int groundTowerHeight = 600;
+  int groundTowerWidth = 190;
+  int groundTowerXPos = 500;
+  int groundTowerYPos = windowHeight - groundTowerHeight;
+  Texture groundTowerTexture;
+
+  char grayPipeSkyName[20] = "gray-pipe-s.png";
+  // int grayPipeSkyHeight = 700;
+  // int grayPipeSkyWidth = 300;
+  int grayPipeSkyWidth = 202;
+  int grayPipeSkyHeight = 900;
+  int grayPipeSkyXPos = 0;
+  int grayPipeSkyYPos = 0;
+  Texture grayPipeSkyTexture;
+
+  char grayPipeGroundName[20] = "gray-pipe-g.png";
+  int grayPipeGroundWidth = 202;
+  int grayPipeGroundHeight = 900;
+  int grayPipeGroundXPos = 0;
+  int grayPipeGroundYPos = windowHeight - grayPipeGroundHeight;
+  Texture grayPipeGroundTexture;
+
+  void LoadObstacle() {
+    // shortBuildingTexture = LoadTexture(shortBuildingName);
+    // longBuildingTexture = LoadTexture(longBuildingName);
+    // groundTowerTexture = LoadTexture(groundTowerName);
+    grayPipeSkyTexture = LoadTexture(grayPipeSkyName);
+    grayPipeGroundTexture = LoadTexture(grayPipeGroundName);
+  }
+
+  void DrawObstacle() {
+    // DrawTexture(shortBuildingTexture, shortBuildingXPos, shortBuildingYPos,
+    //             defaultColor);
+    // DrawTexture(longBuildingTexture, longBuildingXPos, longBuildingYPos,
+    //             defaultColor);
+    // DrawTexture(groundTowerTexture, groundTowerXPos, groundTowerYPos,
+    //             defaultColor);
+    // DrawTexture(grayPipeSkyTexture, grayPipeSkyXPos, grayPipeSkyYPos,
+    // defaultColor); DrawTexture(positionOneTexture, positionOneXPos,
+    // positionOneYPos,
+    //             defaultColor);
+    // DrawTexture(positionTwoTexture, positionTwoXPos, positionTwoYPos,
+    //             defaultColor);
+
+    // if (frameSeconds % 3 == 0) {
+    //   ResetObstacle();
+    //   DrawTexture(grayPipeSkyTexture, grayPipeSkyXPos, grayPipeSkyYPos,
+    //               defaultColor);
+
+    //   DrawTexture(grayPipeGroundTexture, grayPipeGroundXPos,
+    //   grayPipeGroundYPos,
+    //               defaultColor);
+    // }
+
+    DrawTexture(grayPipeSkyTexture, grayPipeSkyXPos, grayPipeSkyYPos,
+                defaultColor);
+
+    DrawTexture(grayPipeGroundTexture, grayPipeGroundXPos, grayPipeGroundYPos,
+                defaultColor);
+  }
+
+  void UnLoadObstacle() {
+    UnloadTexture(longBuildingTexture);
+    UnloadTexture(shortBuildingTexture);
+    UnloadTexture(groundTowerTexture);
+    UnloadTexture(grayPipeSkyTexture);
+    UnloadTexture(grayPipeGroundTexture);
+  }
+
+  void ResetObstacle() {
+    // int narrowPassage = 300;
+    // int minimumHeight = 400;
+    // int maximumHeight = 200;
+
+    // if (frameSeconds % 5 == 0 && isPaintObstacle) {
+
+    //   int rPassageS = GetRandomValue(200, 500);
+    //   int rPassageG = rPassageS + narrowPassage;
+    //   printf("%d,%d\n", rPassageS, rPassageG);
+
+    //   grayPipeSkyYPos = rPassageS - grayPipeSkyHeight;
+    //   grayPipeGroundYPos = rPassageG;
+
+    //   // if (grayPipeGroundXPos + grayPipeGroundWidth >= windowWidth &&
+    //   //     grayPipeSkyYPos + grayPipeSkyWidth >= windowWidth) {
+
+    //   //   printf("%d\n", grayPipeSkyXPos);
+
+    //   //   grayPipeGroundXPos -= windowWidth;
+    //   //   grayPipeSkyXPos -= windowWidth;
+    //   // }
+    //   isPaintObstacle = false;
+    // }
+
+    if (isStartMenu) {
+      return;
+    }
+
+    grayPipeSkyXPos -= 4;
+    grayPipeGroundXPos -= 4;
+
+    // printf("%d, %d\n", grayPipeGroundXPos, grayPipeGroundYPos);
+
+    if (grayPipeGroundXPos <= -grayPipeGroundWidth &&
+        grayPipeSkyYPos <= -grayPipeSkyWidth) {
+      // if (grayPipeGroundXPos <= -500 && grayPipeSkyYPos <= -500) {
+      printf("%d\n", grayPipeSkyXPos);
+      grayPipeSkyXPos += windowWidth + windowWidth / 2;
+      grayPipeGroundXPos += windowWidth + windowWidth / 2;
+      isPaintObstacle = true;
+
+      int rPassageS = GetRandomValue(0, 700);
+      int rPassageG = rPassageS + narrowPassage;
+      // printf("%d,%d\n", rPassageS, rPassageG);
+
+      grayPipeSkyYPos = rPassageS - grayPipeSkyHeight;
+      grayPipeGroundYPos = rPassageG;
+
+      // if (grayPipeGroundXPos + grayPipeGroundWidth >= windowWidth &&
+      //     grayPipeSkyYPos + grayPipeSkyWidth >= windowWidth) {
+
+      //   printf("%d\n", grayPipeSkyXPos);
+
+      //   grayPipeGroundXPos -= windowWidth;
+      //   grayPipeSkyXPos -= windowWidth;
+      // }
+      isPaintObstacle = false;
+    }
+  }
+};
+
+class Bird : public Obstacle {
 private:
 public:
   const int width = 0;
@@ -283,356 +455,33 @@ public:
   }
 };
 
-class FrameTime : public MainWindow {
-private:
-public:
-  void ResetFrameTime() {
-
-    if (isStartMenu || resetValues) {
-      currentFrame = 0;
-      frameSeconds = 0;
-      frameMinutes = 0;
-      return;
-    }
-    if (currentFrame >= fps) {
-      frameSeconds += 1;
-      currentFrame = 0;
-
-      if (frameSeconds >= fps) {
-        frameMinutes += 1;
-        frameSeconds = 0;
-      }
-
-    } else {
-      currentFrame += 1;
-    }
-  }
-};
-
-class GroundObstacle {
-private:
-public:
-  int narrowPassage = 300;
-  int minimumHeight = 400;
-  int maximumHeight = 200;
-
-  char shortBuildingName[20] = "short-building.png";
-  int shortBuildingHeight = 0;
-  int shortBuildingWidth = 466;
-  int shortBuildingXPos = 100;
-  int shortBuildingYPos = windowHeight - shortBuildingWidth;
-  Texture shortBuildingTexture;
-
-  char longBuildingName[20] = "long-building.png";
-  int longBuildingHeight = 643;
-  int longBuildingWidth = 300;
-  int longBuildingXPos = 0;
-  int longBuildingYPos = windowHeight - longBuildingHeight;
-  Texture longBuildingTexture;
-
-  char groundTowerName[20] = "ground-tower.png";
-  int groundTowerHeight = 600;
-  int groundTowerWidth = 190;
-  int groundTowerXPos = 500;
-  int groundTowerYPos = windowHeight - groundTowerHeight;
-  Texture groundTowerTexture;
-
-  char grayPipeSkyName[20] = "gray-pipe-s.png";
-  // int grayPipeSkyHeight = 700;
-  // int grayPipeSkyWidth = 300;
-  int grayPipeSkyWidth = 202;
-  int grayPipeSkyHeight = 500;
-  int grayPipeSkyXPos = 0;
-  int grayPipeSkyYPos = 0;
-  Texture grayPipeSkyTexture;
-
-  char grayPipeGroundName[20] = "gray-pipe-g.png";
-  int grayPipeGroundWidth = 202;
-  int grayPipeGroundHeight = 500;
-  int grayPipeGroundXPos = 0;
-  int grayPipeGroundYPos = windowHeight - grayPipeGroundHeight;
-  Texture grayPipeGroundTexture;
-
-  int positionOneXPos = 268;
-  int positionOneYPos;
-  char *positionOneName;
-  int posiitonOneWidth;
-  int posiitonOneHeight;
-  Texture positionOneTexture;
-
-  int positionTwoXPos = 536;
-  int positionTwoYPos;
-  char *positionTwoName;
-  int posiitonTwoWidth;
-  int posiitonTwoHeight;
-  Texture positionTwoTexture;
-
-  int positionThreeXPos = 804;
-  int positionThreeYPos;
-  char *positionThreeName;
-  int posiitonThreeWidth;
-  int posiitonThreeHeight;
-  Texture positionThreeTexture;
-
-  int positionFourXPos = 1072;
-  int positionFourYPos;
-  char *positionFourName;
-  int posiitonFourWidth;
-  int posiitonFourHeight;
-  Texture positionFourTexture;
-
-  void LoadObstacle() {
-    // shortBuildingTexture = LoadTexture(shortBuildingName);
-    // longBuildingTexture = LoadTexture(longBuildingName);
-    // groundTowerTexture = LoadTexture(groundTowerName);
-    grayPipeSkyTexture = LoadTexture(grayPipeSkyName);
-    grayPipeGroundTexture = LoadTexture(grayPipeGroundName);
-
-    // positionOneTexture = LoadTexture(posiitonOneName);
-    // positionTwoTexture = LoadTexture(posiitonTwoName);
-    // positionThreeTexture = LoadTexture(posiitonThreeName);
-    // positionFourTexture = LoadTexture(posiitonFourName);
-  }
-
-  void DrawObstacle() {
-    // DrawTexture(shortBuildingTexture, shortBuildingXPos, shortBuildingYPos,
-    //             defaultColor);
-    // DrawTexture(longBuildingTexture, longBuildingXPos, longBuildingYPos,
-    //             defaultColor);
-    // DrawTexture(groundTowerTexture, groundTowerXPos, groundTowerYPos,
-    //             defaultColor);
-    // DrawTexture(grayPipeSkyTexture, grayPipeSkyXPos, grayPipeSkyYPos,
-    // defaultColor); DrawTexture(positionOneTexture, positionOneXPos,
-    // positionOneYPos,
-    //             defaultColor);
-    // DrawTexture(positionTwoTexture, positionTwoXPos, positionTwoYPos,
-    //             defaultColor);
-
-    // bool drawRandom = false;
-    // if (drawRandom) {
-    //   DrawTexture(positionOneTexture, positionOneXPos, positionOneYPos,
-    //               defaultColor);
-    //   DrawTexture(positionTwoTexture, positionTwoXPos, positionTwoYPos,
-    //               defaultColor);
-    //   DrawTexture(positionThreeTexture, positionThreeXPos, positionThreeYPos,
-    //               defaultColor);
-    //   DrawTexture(positionFourTexture, positionFourXPos, positionFourYPos,
-    //               defaultColor);
-    // }
-
-    // if (frameSeconds % 3 == 0) {
-    //   ResetObstacle();
-    //   DrawTexture(grayPipeSkyTexture, grayPipeSkyXPos, grayPipeSkyYPos,
-    //               defaultColor);
-
-    //   DrawTexture(grayPipeGroundTexture, grayPipeGroundXPos,
-    //   grayPipeGroundYPos,
-    //               defaultColor);
-    // }
-
-    DrawTexture(grayPipeSkyTexture, grayPipeSkyXPos, grayPipeSkyYPos,
-                defaultColor);
-
-    DrawTexture(grayPipeGroundTexture, grayPipeGroundXPos, grayPipeGroundYPos,
-                defaultColor);
-
-    // DrawTexture(grayPipeSkyTexture, grayPipeSkyXPos, grayPipeSkyYPos,
-    //             defaultColor);
-
-    // DrawTexture(grayPipeGroundTexture, grayPipeGroundXPos,
-    // grayPipeGroundYPos,
-    //             defaultColor);
-  }
-  // void DrawObstacleOne() {
-  //   DrawTexture(positionOneTexture, positionOneXPos, positionOneYPos,
-  //   defaultColor
-  //);
-  // }
-
-  // void DrawObstacleTwo() {
-  //   DrawTexture(positionTwoTexture, positionTwoXPos, positionTwoYPos,
-  //   defaultColor
-  //);
-  // }
-
-  // void DrawObstacleThree() {
-  //   DrawTexture(positionThreeTexture, positionThreeXPos, positionThreeYPos,
-  //               defaultColor
-  //);
-  // }
-
-  // void DrawObstacleFour() {
-  //   DrawTexture(positionFourTexture, positionFourXPos, positionFourYPos,
-  //   defaultColor
-  //);
-  // }
-
-  // void setPositionIdValues(int posiitonId, char name[20], Texture texture,
-  //                          int posX, int posY, int width, int height) {
-  //   switch (posiitonId) {
-  //   case 1:
-  //     positionOneTexture = texture;
-  //     positionOneName = name;
-  //     posiitonOneWidth = width;
-  //     posiitonOneHeight = height;
-  //     // positionOneXPos = posX;
-  //     positionOneYPos = posY;
-
-  //   case 2:
-  //     positionTwoTexture = texture;
-  //     positionTwoName = name;
-  //     posiitonTwoWidth = width;
-  //     posiitonTwoHeight = height;
-  //     // positionTwoXPos = posX;
-  //     positionTwoYPos = posY;
-  //   case 3:
-  //     positionThreeTexture = texture;
-  //     positionThreeName = name;
-  //     posiitonThreeWidth = width;
-  //     posiitonThreeHeight = height;
-  //     // positionThreeXPos = posX;
-  //     positionThreeYPos = posY;
-  //   case 4:
-  //     positionFourTexture = texture;
-  //     positionFourName = name;
-  //     posiitonFourWidth = width;
-  //     posiitonFourHeight = height;
-  //     // positionFourXPos = posX;
-  //     positionFourYPos = posY;
-  //   default:
-  //     return;
-  //   }
-  // }
-
-  // void randomHelper(int positionId) {
-  //   int randomObstacleId = GetRandomValue(1, 4);
-
-  //   switch (randomObstacleId) {
-  //   case 1:
-  //     setPositionIdValues(positionId, shortBuildingName,
-  //     shortBuildingTexture,
-  //                         shortBuildingXPos, shortBuildingYPos,
-  //                         shortBuildingWidth, shortBuildingHeight);
-  //     // printf("%s \n ", shortBuildingName);
-  //   case 2:
-  //     setPositionIdValues(positionId, longBuildingName, longBuildingTexture,
-  //                         longBuildingXPos, longBuildingYPos,
-  //                         longBuildingWidth, longBuildingHeight);
-  //     // printf("%s \n ", longBuildingName);
-  //   case 3:
-  //     setPositionIdValues(positionId, groundTowerName, groundTowerTexture,
-  //                         groundTowerXPos, groundTowerYPos, groundTowerWidth,
-  //                         groundTowerHeight);
-  //     // printf("%s \n ", groundTowerName);
-
-  //   case 4:
-  //     setPositionIdValues(positionId, grayPipeSkyName, grayPipeSkyTexture,
-  //                         grayPipeSkyXPos, grayPipeSkyYPos, grayPipeSkyWidth,
-  //                         grayPipeSkyHeight);
-  //     // printf("%s \n ", grayPipeSkyName);
-
-  //   default:
-  //     return;
-  //   }
-  // }
-
-  void UnLoadObstacle() {
-    UnloadTexture(longBuildingTexture);
-    UnloadTexture(shortBuildingTexture);
-    UnloadTexture(groundTowerTexture);
-    UnloadTexture(grayPipeSkyTexture);
-    UnloadTexture(grayPipeGroundTexture);
-  }
-
-  void ResetObstacle() {
-    // int narrowPassage = 300;
-    // int minimumHeight = 400;
-    // int maximumHeight = 200;
-
-    if (frameSeconds % 5 == 0 && isPaintObstacle) {
-
-      int rPassageS = GetRandomValue(200, 500);
-      int rPassageG = rPassageS + narrowPassage;
-      printf("%d,%d\n", rPassageS, rPassageG);
-
-      grayPipeSkyYPos = rPassageS - grayPipeSkyHeight;
-      grayPipeGroundYPos = rPassageG;
-
-      // if (grayPipeGroundXPos + grayPipeGroundWidth >= windowWidth &&
-      //     grayPipeSkyYPos + grayPipeSkyWidth >= windowWidth) {
-
-      //   printf("%d\n", grayPipeSkyXPos);
-
-      //   grayPipeGroundXPos -= windowWidth;
-      //   grayPipeSkyXPos -= windowWidth;
-      // }
-      isPaintObstacle = false;
-    }
-    if (grayPipeGroundXPos <= 0 && grayPipeSkyYPos <= 0) {
-      printf("%d\n", grayPipeSkyXPos);
-      grayPipeSkyXPos += windowWidth;
-      grayPipeGroundXPos += windowWidth;
-      isPaintObstacle = true;
-    }
-
-    if (isStartMenu) {
-      return;
-    }
-    if (grayPipeSkyYPos + grayPipeGroundHeight + grayPipeGroundYPos >=
-        windowHeight) {
-      // printf("sky: %d, ground: %d\n", grayPipeGroundHeight,
-      // grayPipeSkyHeight);
-      // grayPipeGroundYPos = 600;
-    }
-
-    grayPipeSkyXPos -= 4;
-    grayPipeGroundXPos -= 4;
-
-    if (resetValues) {
-      groundTowerXPos = 100;
-      grayPipeSkyXPos = 268;
-      positionOneXPos = positionDefaultOneXPos;
-      positionTwoXPos = positionDefaultTwoXPos;
-      positionThreeXPos = positionDefaultThreeXPos;
-      positionFourXPos = positionDefaultFourXPos;
-      return;
-    }
-
-    // groundTowerXPos -= 4;
-    positionOneXPos -= 4;
-    positionTwoXPos -= 4;
-    positionThreeXPos -= 4;
-    positionFourXPos -= 4;
-
-    if (frameSeconds % 10 == 0) {
-      for (int i = 1; i <= positionCount; i++) {
-        // randomHelper(i);
-        // switch (i) {
-        // case 1:
-        //   printf("Position %i\n", i);
-        //   randomHelper(i);
-        // case 2:
-        //   printf("Position %i\n", i);
-        //   randomHelper(i);
-        // case 3:
-        //   printf("Position %i\n", i);
-        //   randomHelper(i);
-        // case 4:
-        //   printf("Position %i\n", i);
-        //   randomHelper(i);
-        // default:
-        //   return;
-        // }
-      }
-    }
-  }
-};
-
 MainWindow mainWindow;
 Renderer renderer;
 StartMenu startMenu;
-GroundObstacle groundObstacle;
+Obstacle obstacle[3];
 FrameTime frameTime;
+
+void checkCollion(Bird &bird, Obstacle &obstacle) {
+
+  bool isCollidingSky =
+      (bird.xPos < obstacle.grayPipeSkyXPos + obstacle.grayPipeSkyWidth &&
+       bird.xPos + bird.width > obstacle.grayPipeSkyXPos &&
+       bird.yPos < obstacle.grayPipeSkyYPos + obstacle.grayPipeSkyHeight &&
+       bird.yPos + bird.height > obstacle.grayPipeSkyYPos);
+  bool isCollidingGround =
+      (bird.xPos < obstacle.grayPipeGroundXPos + obstacle.grayPipeGroundWidth &&
+       bird.xPos + bird.width > obstacle.grayPipeGroundXPos &&
+       bird.yPos <
+           obstacle.grayPipeGroundYPos + obstacle.grayPipeGroundHeight &&
+       bird.yPos + bird.height > obstacle.grayPipeGroundYPos);
+  if (isCollidingSky || isCollidingGround) {
+    isGameOver = true;
+
+    // printf("obstacleG X: %d, y: %d, Width: %d, height: %d\n",
+    //        obstacle.grayPipeGroundXPos, obstacle.grayPipeGroundYPos,
+    //        obstacle.grayPipeSkyWidth, obstacle.grayPipeGroundHeight);
+  }
+}
 
 int main() {
 
@@ -648,7 +497,12 @@ int main() {
   backgroundImage.LoadBackgroundImage();
   bird.LoadBird();
   bird.LoadBird2();
-  groundObstacle.LoadObstacle();
+
+  for (int i = 0; i < 4; i++) {
+    obstacle[i].LoadObstacle();
+  }
+
+  // obstacle.LoadObstacle();
   startMenu.LoadBird();
 
   while (!WindowShouldClose()) {
@@ -661,7 +515,26 @@ int main() {
       bird.ScoreCount();
       frameTime.ResetFrameTime();
       if (!spawnRelieve) {
-        groundObstacle.ResetObstacle();
+
+        for (int i = 0; i < 4; i++) {
+          obstacle[i].ResetObstacle();
+        }
+
+      } else {
+        obstacle[0].grayPipeSkyXPos = 670;
+        obstacle[0].grayPipeGroundXPos = 670;
+        obstacle[0].grayPipeSkyYPos = -400;
+        obstacle[0].grayPipeGroundYPos = 800;
+
+        obstacle[1].grayPipeSkyXPos = 1340;
+        obstacle[1].grayPipeGroundXPos = 1340;
+        obstacle[1].grayPipeSkyYPos = -600;
+        obstacle[1].grayPipeGroundYPos = 600;
+
+        obstacle[2].grayPipeSkyXPos = 2110;
+        obstacle[2].grayPipeGroundXPos = 2110;
+        obstacle[2].grayPipeSkyYPos = -300;
+        obstacle[2].grayPipeGroundYPos = 900;
       }
     }
 
@@ -690,7 +563,26 @@ int main() {
                         GetScreenWidth() - 220, 20, defaultFontSize,
                         defaultColor);
       if (!isGameOver) {
-        groundObstacle.DrawObstacle();
+        for (int i = 0; i < 4; i++) {
+          checkCollion(bird, obstacle[i]);
+          obstacle[i].DrawObstacle();
+          if (isGameOver) {
+            obstacle[0].grayPipeSkyXPos = 670;
+            obstacle[0].grayPipeGroundXPos = 670;
+            obstacle[0].grayPipeSkyYPos = -400;
+            obstacle[0].grayPipeGroundYPos = 800;
+
+            obstacle[1].grayPipeSkyXPos = 1340;
+            obstacle[1].grayPipeGroundXPos = 1340;
+            obstacle[1].grayPipeSkyYPos = -600;
+            obstacle[1].grayPipeGroundYPos = 600;
+
+            obstacle[2].grayPipeSkyXPos = 2110;
+            obstacle[2].grayPipeGroundXPos = 2110;
+            obstacle[2].grayPipeSkyYPos = -300;
+            obstacle[2].grayPipeGroundYPos = 900;
+          }
+        }
         bird.DrawBird();
         if (IsKeyPressed(KEY_UP) || IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
           spawnRelieve = false;
@@ -727,7 +619,11 @@ int main() {
   backgroundImage.UnLoadBackground();
   bird.UnLoadBird();
   bird.UnLoadBird2();
-  groundObstacle.UnLoadObstacle();
+
+  for (int i = 0; i < 4; i++) {
+    obstacle[i].UnLoadObstacle();
+  }
+
   startMenu.UnLoadBird();
 
   mainWindow.destroy();
