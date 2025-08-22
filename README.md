@@ -6,7 +6,11 @@ My first game in raylib here! Lets get flappy! 🐦
 | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
 | <img width="1617" height="1080" alt="start=menu" src="https://github.com/user-attachments/assets/a8705492-340d-4479-a053-9d66b1b4b884" /> | <img width="1605" height="1080" alt="gameplay" src="https://github.com/user-attachments/assets/e36e0c21-6916-4a58-83a0-1586122d3506" /> |
 
-NOTE: Download the zip files from release tags, make sure you resources directory placed correctly. Assets are not bundled with the executable!
+## Download  
+Get the Game/ Precompiled binaries for Windows Or Linux from [github release](https://github.com/ferozeren/flappy-bird/releases/tag/0.1.0).
+
+
+NOTE: Download the zip files from release tags, make sure you dynamic libraries present within the executable directory.
 
 ## Supported Platforms
 
