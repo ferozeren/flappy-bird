@@ -1,7 +1,5 @@
-// raylib lib
-#include "../include/resource_dir.h" // header for SearchAndSetResourceDir
+#include "../include/resource_dir.h"
 #include "raylib.h"
-#include <cstdio>
 
 const unsigned int windowWidth = 1340;
 const unsigned int windowHeight = 900;
@@ -196,8 +194,6 @@ public:
   Texture groundTowerTexture;
 
   char grayPipeSkyName[20] = "gray-pipe-s.png";
-  // int grayPipeSkyHeight = 700;
-  // int grayPipeSkyWidth = 300;
   int grayPipeSkyWidth = 202;
   int grayPipeSkyHeight = 900;
   int grayPipeSkyXPos = 0;
@@ -259,29 +255,6 @@ public:
   }
 
   void ResetObstacle() {
-    // int narrowPassage = 300;
-    // int minimumHeight = 400;
-    // int maximumHeight = 200;
-
-    // if (frameSeconds % 5 == 0 && isPaintObstacle) {
-
-    //   int rPassageS = GetRandomValue(200, 500);
-    //   int rPassageG = rPassageS + narrowPassage;
-    //   printf("%d,%d\n", rPassageS, rPassageG);
-
-    //   grayPipeSkyYPos = rPassageS - grayPipeSkyHeight;
-    //   grayPipeGroundYPos = rPassageG;
-
-    //   // if (grayPipeGroundXPos + grayPipeGroundWidth >= windowWidth &&
-    //   //     grayPipeSkyYPos + grayPipeSkyWidth >= windowWidth) {
-
-    //   //   printf("%d\n", grayPipeSkyXPos);
-
-    //   //   grayPipeGroundXPos -= windowWidth;
-    //   //   grayPipeSkyXPos -= windowWidth;
-    //   // }
-    //   isPaintObstacle = false;
-    // }
 
     if (isStartMenu) {
       return;
@@ -290,31 +263,18 @@ public:
     grayPipeSkyXPos -= 4;
     grayPipeGroundXPos -= 4;
 
-    // printf("%d, %d\n", grayPipeGroundXPos, grayPipeGroundYPos);
-
     if (grayPipeGroundXPos <= -grayPipeGroundWidth &&
         grayPipeSkyYPos <= -grayPipeSkyWidth) {
-      // if (grayPipeGroundXPos <= -500 && grayPipeSkyYPos <= -500) {
-      printf("%d\n", grayPipeSkyXPos);
       grayPipeSkyXPos += windowWidth + windowWidth / 2;
       grayPipeGroundXPos += windowWidth + windowWidth / 2;
       isPaintObstacle = true;
 
       int rPassageS = GetRandomValue(0, 700);
       int rPassageG = rPassageS + narrowPassage;
-      // printf("%d,%d\n", rPassageS, rPassageG);
 
       grayPipeSkyYPos = rPassageS - grayPipeSkyHeight;
       grayPipeGroundYPos = rPassageG;
 
-      // if (grayPipeGroundXPos + grayPipeGroundWidth >= windowWidth &&
-      //     grayPipeSkyYPos + grayPipeSkyWidth >= windowWidth) {
-
-      //   printf("%d\n", grayPipeSkyXPos);
-
-      //   grayPipeGroundXPos -= windowWidth;
-      //   grayPipeSkyXPos -= windowWidth;
-      // }
       isPaintObstacle = false;
     }
   }
@@ -328,8 +288,10 @@ public:
 
   int xPos = 0;
   int yPos = 0;
-  int velocity = 8;
-  int gravity = 12;
+  // int velocity = 8;
+  int velocity = 6;
+  // int gravity = 12;
+  int gravity = 8;
   bool wingUp = false;
   bool flapSpan = 60;
   bool wingDown = true;
@@ -379,8 +341,9 @@ public:
       return;
     }
 
-    if (!isGameOver) {
-      scoreCount += 1; // WARNING
+    if (frameSeconds % 4 == 0 && currentFrame == fps) {
+
+      scoreCount += 1;
     }
 
     if (yPos >= GetScreenHeight() - height / 2) {
@@ -455,12 +418,6 @@ public:
   }
 };
 
-MainWindow mainWindow;
-Renderer renderer;
-StartMenu startMenu;
-Obstacle obstacle[3];
-FrameTime frameTime;
-
 void checkCollion(Bird &bird, Obstacle &obstacle) {
 
   bool isCollidingSky =
@@ -474,14 +431,22 @@ void checkCollion(Bird &bird, Obstacle &obstacle) {
        bird.yPos <
            obstacle.grayPipeGroundYPos + obstacle.grayPipeGroundHeight &&
        bird.yPos + bird.height > obstacle.grayPipeGroundYPos);
+
   if (isCollidingSky || isCollidingGround) {
     isGameOver = true;
-
-    // printf("obstacleG X: %d, y: %d, Width: %d, height: %d\n",
-    //        obstacle.grayPipeGroundXPos, obstacle.grayPipeGroundYPos,
-    //        obstacle.grayPipeSkyWidth, obstacle.grayPipeGroundHeight);
   }
+
+  // if (bird.xPos < obstacle.grayPipeSkyXPos + obstacle.grayPipeSkyWidth &&
+  //     bird.xPos + bird.width > obstacle.grayPipeSkyXPos) {
+  //   scoreCount += 1;
+  // }
 }
+
+MainWindow mainWindow;
+Renderer renderer;
+StartMenu startMenu;
+Obstacle obstacle[3];
+FrameTime frameTime;
 
 int main() {
 
@@ -516,7 +481,7 @@ int main() {
       frameTime.ResetFrameTime();
       if (!spawnRelieve) {
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
           obstacle[i].ResetObstacle();
         }
 
@@ -557,15 +522,10 @@ int main() {
       }
     } else {
 
-      renderer.drawText(TextFormat("Scores: %i", scoreCount), 20, 20,
-                        defaultFontSize, defaultColor);
-      renderer.drawText(TextFormat("Record: %i", hightestScore),
-                        GetScreenWidth() - 220, 20, defaultFontSize,
-                        defaultColor);
       if (!isGameOver) {
-        for (int i = 0; i < 4; i++) {
-          checkCollion(bird, obstacle[i]);
+        for (int i = 0; i < 3; i++) {
           obstacle[i].DrawObstacle();
+          checkCollion(bird, obstacle[i]);
           if (isGameOver) {
             obstacle[0].grayPipeSkyXPos = 670;
             obstacle[0].grayPipeGroundXPos = 670;
@@ -588,6 +548,11 @@ int main() {
           spawnRelieve = false;
         }
         renderer.clearBackground(BLACK);
+        renderer.drawText(TextFormat("Scores: %i", scoreCount), 20, 20,
+                          defaultFontSize, defaultColor);
+        renderer.drawText(TextFormat("Record: %i", hightestScore),
+                          GetScreenWidth() - 220, 20, defaultFontSize,
+                          defaultColor);
 
       } else {
         // bird.isGameOver = false; // WARNING
