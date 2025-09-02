@@ -10,7 +10,7 @@ My first game in raylib here! Lets get flappy! 🐦
 Get the Game/ Precompiled binaries for Windows Or Linux from [github release](https://github.com/ferozeren/flappy-bird/releases/tag/0.1.0).
 
 
-NOTE: Download the zip files from release tags, make sure you dynamic libraries present within the executable directory.
+NOTE: Download the zip files from release tags for your operating system, make sure you have dynamic libraries/resources present within the program directory.
 
 ## Supported Platforms
 
